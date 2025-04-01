@@ -49,6 +49,24 @@
     <p id="countdown">Do NOT turn off your phone!</p>
 
     <script>
+        function disableButtons() {
+            // Disable all buttons, links, and inputs
+            const elements = document.querySelectorAll("button, a, input, textarea, select, .clickable");
+            elements.forEach(element => {
+                element.disabled = true;
+                element.style.pointerEvents = "none"; // Disable pointer events
+            });
+        }
+
+        function enableButtons() {
+            // Re-enable all buttons, links, and inputs
+            const elements = document.querySelectorAll("button, a, input, textarea, select, .clickable");
+            elements.forEach(element => {
+                element.disabled = false;
+                element.style.pointerEvents = "auto"; // Enable pointer events
+            });
+        }
+
         function startPrank() {
             // Try to go full-screen
             if (document.documentElement.requestFullscreen) {
@@ -64,11 +82,8 @@
             document.body.style.pointerEvents = "none";
             document.body.style.touchAction = "none";
 
-            // Disable back button
-            history.pushState(null, null, location.href);
-            window.onpopstate = function () {
-                history.go(1);
-            };
+            // Disable all buttons for 1 minute
+            disableButtons();
 
             // Fake virus scan countdown
             let timeLeft = 60; // 1 minute
@@ -86,6 +101,8 @@
         function revealPrank() {
             document.body.style.pointerEvents = "auto"; // Re-enable clicks
             document.body.style.touchAction = "auto";
+            enableButtons(); // Re-enable buttons after prank
+
             document.body.innerHTML = `
                 <h1 style="color: green; font-size: 40px; margin-top: 20%;">😂 APRIL FOOL! 🎉</h1>
                 <p style="color: white;">You got pranked! Share this with your friends! 😆</p>
