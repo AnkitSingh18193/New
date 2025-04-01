@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Error</title>
+    <title>System Warning</title>
     <style>
         body {
             background: black;
@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            user-select: none; /* Disable text selection */
         }
         #warning {
             font-size: 24px;
@@ -28,7 +29,6 @@
             font-size: 30px;
             font-weight: bold;
             text-transform: uppercase;
-            position: relative;
             color: red;
             animation: glitch 0.3s infinite;
         }
@@ -42,34 +42,40 @@
         }
     </style>
 </head>
-<body onload="startPrank()">
+<body>
 
     <h1 id="warning">⚠ SYSTEM ERROR: Unauthorized Access Detected!</h1>
-    <h2 class="glitch">Your device is being hacked...</h2>
-    <p id="countdown">Checking for threats...</p>
+    <h2 class="glitch">Factory Reset in Progress...</h2>
+    <p id="countdown">Do NOT turn off your phone!</p>
 
     <script>
         function startPrank() {
-            // Full-screen mode (hides browser UI)
+            // Try to go full-screen
             if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
+                document.documentElement.requestFullscreen().catch(() => {});
             }
 
-            // Play beep sound
+            // Play beep sound repeatedly
             let beep = new Audio("https://www.soundjay.com/button/beep-07.wav");
-            setInterval(() => beep.play(), 3000);
+            beep.volume = 0.6; // Louder than before
+            setInterval(() => beep.play(), 2000); // Every 2 sec for panic effect
 
-            // Shake effect
-            setInterval(() => {
-                document.body.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
-            }, 100);
+            // Fake "System Freeze" (disables clicks & keys)
+            document.body.style.pointerEvents = "none";
+            document.body.style.touchAction = "none";
+
+            // Disable back button
+            history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                history.go(1);
+            };
 
             // Fake virus scan countdown
-            let timeLeft = 120;
+            let timeLeft = 60; // 1 minute
             let countdown = document.getElementById("countdown");
             let interval = setInterval(() => {
                 timeLeft--;
-                countdown.innerHTML = `Scanning: ${timeLeft}s remaining...`;
+                countdown.innerHTML = `Resetting System: ${timeLeft}s remaining...`;
                 if (timeLeft <= 0) {
                     clearInterval(interval);
                     revealPrank();
@@ -78,11 +84,16 @@
         }
 
         function revealPrank() {
+            document.body.style.pointerEvents = "auto"; // Re-enable clicks
+            document.body.style.touchAction = "auto";
             document.body.innerHTML = `
                 <h1 style="color: green; font-size: 40px; margin-top: 20%;">😂 APRIL FOOL! 🎉</h1>
-                <p style="color: white;">You got pranked! Send this to your friends and trick them too! 😆</p>
+                <p style="color: white;">You got pranked! Share this with your friends! 😆</p>
             `;
         }
+
+        // Start prank immediately
+        startPrank();
     </script>
 
 </body>
