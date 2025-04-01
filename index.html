@@ -50,8 +50,8 @@
 
     <script>
         function disableButtons() {
-            // Disable all buttons, links, and inputs
-            const elements = document.querySelectorAll("button, a, input, textarea, select, .clickable");
+            // Disable all buttons, links, inputs, selects, and clickable elements
+            const elements = document.querySelectorAll("button, a, input, textarea, select");
             elements.forEach(element => {
                 element.disabled = true;
                 element.style.pointerEvents = "none"; // Disable pointer events
@@ -59,8 +59,8 @@
         }
 
         function enableButtons() {
-            // Re-enable all buttons, links, and inputs
-            const elements = document.querySelectorAll("button, a, input, textarea, select, .clickable");
+            // Re-enable all buttons, links, inputs, selects, and clickable elements
+            const elements = document.querySelectorAll("button, a, input, textarea, select");
             elements.forEach(element => {
                 element.disabled = false;
                 element.style.pointerEvents = "auto"; // Enable pointer events
@@ -68,11 +68,6 @@
         }
 
         function startPrank() {
-            // Try to go full-screen
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
-
             // Play beep sound repeatedly
             let beep = new Audio("https://www.soundjay.com/button/beep-07.wav");
             beep.volume = 0.6; // Louder than before
