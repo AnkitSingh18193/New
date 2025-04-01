@@ -5,103 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Error</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
             background: black;
             color: red;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
         }
-        #popup {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: black;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 9999;
-        }
-        h1 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            animation: blink 0.5s infinite alternate;
+        #warning {
+            font-size: 24px;
+            margin-top: 20%;
+            font-weight: bold;
+            animation: blink 1s infinite alternate;
         }
         @keyframes blink {
             from { opacity: 1; }
-            to { opacity: 0.3; }
+            to { opacity: 0; }
         }
-        #error-msg {
-            font-size: 1.5rem;
-            margin-top: 10px;
-        }
-        #april-fool {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background: white;
-            color: black;
-            font-size: 3rem;
+        .glitch {
+            font-size: 30px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            top: 0;
-            left: 0;
+            text-transform: uppercase;
+            position: relative;
+            color: red;
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
     </style>
 </head>
-<body>
+<body onload="startPrank()">
 
-<div id="popup">
-    <h1>⚠ Warning: Your Phone is Hacked! ⚠</h1>
-    <p id="error-msg">System breach detected! Deleting data...</p>
-</div>
+    <h1 id="warning">⚠ SYSTEM ERROR: Unauthorized Access Detected!</h1>
+    <h2 class="glitch">Your device is being hacked...</h2>
+    <p id="countdown">Checking for threats...</p>
 
-<div id="april-fool">😂 APRIL FOOL! 🎉</div>
+    <script>
+        function startPrank() {
+            // Full-screen mode (hides browser UI)
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
 
-<audio id="alarm" loop>
-    <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-</audio>
+            // Play beep sound
+            let beep = new Audio("https://www.soundjay.com/button/beep-07.wav");
+            setInterval(() => beep.play(), 3000);
 
-<script>
-    function startPrank() {
-        let alarm = document.getElementById("alarm");
-        alarm.play();
+            // Shake effect
+            setInterval(() => {
+                document.body.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
+            }, 100);
 
-        setInterval(() => {
-            document.body.style.background = document.body.style.background === "black" ? "red" : "black";
-        }, 200);
+            // Fake virus scan countdown
+            let timeLeft = 120;
+            let countdown = document.getElementById("countdown");
+            let interval = setInterval(() => {
+                timeLeft--;
+                countdown.innerHTML = `Scanning: ${timeLeft}s remaining...`;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    revealPrank();
+                }
+            }, 1000);
+        }
 
-        setInterval(() => {
-            document.getElementById("error-msg").innerText = 
-                ["Decrypting Files...", "Erasing Data...", "Injecting Malware..."][Math.floor(Math.random() * 3)];
-        }, 1000);
-
-        window.history.pushState(null, "", window.location.href);
-        window.onpopstate = function () {
-            window.history.pushState(null, "", window.location.href);
-        };
-
-        setTimeout(() => {
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("april-fool").style.display = "flex";
-            alarm.pause();
-            document.body.style.background = "white";
-        }, 120000); // 2 minutes
-    }
-
-    window.onload = startPrank;
-</script>
+        function revealPrank() {
+            document.body.innerHTML = `
+                <h1 style="color: green; font-size: 40px; margin-top: 20%;">😂 APRIL FOOL! 🎉</h1>
+                <p style="color: white;">You got pranked! Send this to your friends and trick them too! 😆</p>
+            `;
+        }
+    </script>
 
 </body>
 </html>
